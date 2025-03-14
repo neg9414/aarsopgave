@@ -53,12 +53,12 @@ class PriceList:
         Args:
             filename (str): The name of the CSV file to save pricelist to.
         """
-        with open(os.path.join(self.current_dir, filename), mode="w") as file:
+        with open(os.path.join(self.current_dir, filename), mode="w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
-            for product, price in self.pricelist.items():
-                writer.writerow([product, price])
+            for product_id, data in self.pricelist.items():
+                writer.writerow([product_id, data["product"], data["price"]])
 
-    def get_price(self, product):
+    def get_price(self, product_id):
         """
         Returns the price of the specified product.
 
@@ -68,9 +68,9 @@ class PriceList:
         Returns:
             float: The price of the product, or None if the product is not found.
         """
-        return self.pricelist.get(product, None)
+        return self.pricelist.get(product_id, None)
 
-    def set_price(self, product, price):
+    def set_price(self, product_id, price):
         """
         Sets the price of the specified product.
 
@@ -78,6 +78,8 @@ class PriceList:
             product (str): The name of the product to set the price for.
             price (float): The price to set for the product.
         """
+        if product_id in self.pricelist:
+            self.pricelist[product_id]["price"] = price
 
     def get_pricelist(self):
         """
@@ -88,6 +90,12 @@ class PriceList:
         """
         return self.pricelist
 
+    def display_products(self):
+        """
+        Prints alle produckter med deres id'er, navne, and pricer.
+        """
+        for product_id, data in self.pricelist.items():
+            print(f"{product_id}: {data['product']} - {data['price']} DKK")
 
 # Example usage:
 if __name__ == "__main__":
