@@ -42,9 +42,9 @@ class PriceList:
         Args:
             filename (str): The name of the CSV file to load pricelist from.
         """
-        with open(os.path.join(self.current_dir, filename), mode="r") as file:
+        with open(os.path.join(self.current_dir, filename), mode="r", encoding="utf-8") as file:
             reader = csv.reader(file)
-            self.pricelist = {rows[0]: float(rows[1]) for rows in reader}
+            self.pricelist = {rows[0]: {"product": rows[1], "price": float(rows[2])} for rows in reader}
 
     def save_pricelist(self, filename):
         """
