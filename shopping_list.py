@@ -18,6 +18,9 @@ class ShoppingList:
 
     def get_items(self):
         return self.items
+    
+    def get_price(self, product_id):
+        return self.pricelist.get(product_id, {}).get("price", None)
 
 
 def main():
@@ -36,22 +39,27 @@ def main():
         
         if command.lower() == "exit":
             break
+        
         elif command.startswith("+"):
             parts = command[1:].strip().split(" ", 1)
             quantity = int(parts[0])
             item = parts[1]
             shopping_list.add_item(item, quantity)
             print(f"Tilføjet: {quantity} x {item}")
+        
         elif command.startswith("-"):
             item = command[1:].strip()
             shopping_list.remove_item(item)
             print(f"Fjernet: {item}")
+        
         elif command.lower() == "list":
             items = shopping_list.get_items()
             print("\nIndkøbsliste:")
             for item, quantity in items.items():
                 print(f"{quantity} x {item}")
-            print()
+            total_price = shopping_list.calculate_total_price()
+            print(f"Samlet pris: {total_price} DKK\n")
+        
         else:
             print("Ugyldig kommando. Prøv igen.")
 
